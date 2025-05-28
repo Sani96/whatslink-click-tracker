@@ -1,0 +1,293 @@
+/* Admin CSS for WhatsLink Click Tracker */
+.error-fatal {
+    color: #ff4c4c;
+    font-weight: bold;
+}
+.error-warning {
+    color: #ffa500;
+}
+.error-notice {
+    color: #ffff66;
+}
+
+.button-danger {
+	background: #dc3545;
+	color: white;
+	border: none;
+}
+.button-danger:hover {
+	background: #bd2130;
+}
+
+#whatslink-click-tracker-footer-bar {
+    margin: 20px auto 40px auto;
+    padding: 15px 20px;
+    background: #f1f1f1;
+    border-left: 4px solid #6E59A5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#whatslink-click-tracker-footer-bar a {
+    color: #6E59A5;
+    text-decoration: none;
+    font-weight: 600;
+}
+#whatslink-click-tracker-footer-bar a:hover {
+    text-decoration: none;
+}
+
+#whatslink-click-tracker-search {
+    padding:6px;
+    width:100%;
+    max-width:400px;
+    margin:1em 0;
+}
+
+#whatslink-click-tracker-total {
+    font-weight:normal;
+    font-size:16px;
+}
+
+#whatslink-click-tracker-notice {
+    margin-top:1em;
+}
+
+#whatslink-click-tracker-search-container {
+    position: relative;
+}
+
+#whatslink-click-tracker-search-container input {
+    padding: 6px 30px 6px 40px;
+    width: 100%;
+    max-width: 400px;
+    margin: 1em 0;
+}
+
+#whatslink-click-tracker-search-container span {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #6E59A5;
+}
+
+#whatslink-click-tracker-reset {
+    display: flex;
+    align-items: center;
+}
+
+#whatslink-click-tracker-reset span {
+    margin-right: .25em;
+}
+
+.blurred-chart-wrapper {
+    position: relative;
+    filter: blur(3px);
+    pointer-events: none;
+    opacity: 0.5;
+}
+.locked-overlay {
+    position: absolute;
+    top: 36%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2em;
+    text-align: center;
+    z-index: 10;
+    pointer-events: auto;
+    filter: none;
+}
+.locked-chart {
+    width: 100%;
+    max-width: 60%;
+    display: block;
+    margin: 0 auto;
+}
+
+.whatslink-click-tracker-pro-badge {
+    background-color: #6E59A5;
+    color: white;
+    font-size: 11px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+.primary-btn {
+    background: #6E59A5!important;
+    color: white!important;
+    border: none!important;
+    padding: 10px 20px!important;
+    border-radius: 4px!important;
+    cursor: pointer!important;
+}
+
+.primary-btn:hover {
+    background: #5a4b8c!important;
+}
+
+
+.whatslink-click-tracker-pagination-reset-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.locked-chart.email-demo,
+.locked-chart.csv-demo{
+    max-width: 100%;
+}
+
+.whatslink-click-tracker-pro-locked {
+    position: relative;
+    filter: blur(3px);
+    opacity: 0.5;
+    text-align: center;
+    cursor: not-allowed;
+}
+
+.whatslink-click-tracker-pro-locked:hover {
+    filter: none;
+    opacity: 1;
+}
+
+.whatslink-click-tracker-pro-locked::after {
+    content: "🔓 Unlock in Pro";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #f9f9f9;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #555;
+    border: 1px solid #ccc;
+    opacity: 0;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.whatslink-click-tracker-pro-locked:hover::after {
+    opacity: 1;
+}
+
+
+.whatslink-click-tracker-pro-locked-wrapper {
+    position: relative;
+    text-align: center;
+    color: #aaa;
+    filter: blur(2px);
+    transition: filter 0.2s ease;
+    cursor: not-allowed;
+}
+
+.whatslink-click-tracker-pro-locked-wrapper:hover {
+    filter: none;
+    cursor: default;
+}
+
+.whatslink-click-tracker-pro-locked-content {
+    display: block;
+    opacity: 0.5;
+}
+
+.whatslink-click-tracker-pro-unlock-link {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    color: #0073aa;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.whatslink-click-tracker-pro-locked-wrapper:hover .whatslink-click-tracker-pro-unlock-link {
+    opacity: 1;
+    pointer-events: all;
+}
+
+@media (max-width: 600px) {
+    #whatslink-click-tracker-footer-bar {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+
+#whatslink-click-tracker-footer-bar {
+    margin: 30px auto 40px auto;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #f9f9f9, #f1f1f1);
+    border-left: 4px solid #6E59A5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    animation: fade-in-footer 0.4s ease-in;
+    transition: background 0.3s ease;
+}
+
+#whatslink-click-tracker-footer-bar:hover {
+    background: linear-gradient(135deg, #f1f1f1, #e7e7e7);
+}
+
+#whatslink-click-tracker-footer-bar a {
+    color: #6E59A5;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+#whatslink-click-tracker-footer-bar a:hover {
+    color: #4e4080;
+    text-decoration: none;
+}
+
+.footer-cta {
+    background-color: #6E59A5;
+    color: #fff !important;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.footer-cta:hover {
+    background-color: #5a4b8c;
+    transform: scale(1.03);
+}
+
+@keyframes fade-in-footer {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    #whatslink-click-tracker-footer-bar {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}
