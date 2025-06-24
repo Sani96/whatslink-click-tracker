@@ -40,12 +40,12 @@ class WhatsLink_Click_Tracker_Admin {
 	 * @return   void
      */
 	public function setup_admin_hooks() {
-		$this->loader->add_action('admin_menu', $this, 'add_admin_menu');
+		$this->loader->add_action('admin_menu', $this, 'whatslink_click_tracker_add_admin_menu');
 		$this->loader->add_action('admin_enqueue_scripts', $this, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $this, 'enqueue_scripts');
-		$this->loader->add_action('wp_ajax_whatslink_click_tracker_get_click_logs', $this, 'get_click_logs');
-		$this->loader->add_action('wp_ajax_nopriv_whatslink_click_tracker_get_click_logs', $this, 'get_click_logs');
-		$this->loader->add_action('wp_ajax_whatslink_click_tracker_reset_clicks', $this, 'reset_click_logs');
+		$this->loader->add_action('wp_ajax_whatslink_click_tracker_get_click_logs', $this, 'whatslink_click_tracker_get_click_logs');
+		$this->loader->add_action('wp_ajax_nopriv_whatslink_click_tracker_get_click_logs', $this, 'whatslink_click_tracker_get_click_logs');
+		$this->loader->add_action('wp_ajax_whatslink_click_tracker_reset_clicks', $this, 'whatslink_click_tracker_reset_click_logs');
 	}
 
 	/**
@@ -55,13 +55,13 @@ class WhatsLink_Click_Tracker_Admin {
 	 * @access   public
 	 * @return   void
 	 */
-	public function add_admin_menu() {
+	public function whatslink_click_tracker_add_admin_menu() {
 		add_menu_page(
 			'WhatsLink Click Tracker',
 			'WhatsLink Click Tracker',
 			'manage_options',
 			$this->plugin_name,
-			array($this, 'display_admin_page'),
+			array($this, 'whatslink_click_tracker_display_admin_page'),
 			'dashicons-phone',
 			6
 		);
@@ -75,7 +75,7 @@ class WhatsLink_Click_Tracker_Admin {
 			'Report'.$label,
 			'manage_options',
 			'whatslink-click-tracker-report',
-			array($this, 'display_report_page')
+			array($this, 'whatslink_click_tracker_display_report_page')
 		);
 
 		add_submenu_page(
@@ -84,7 +84,7 @@ class WhatsLink_Click_Tracker_Admin {
 			'Email Settings'.$label,
 			'manage_options',
 			'whatslink-click-tracker-email-settings',
-			[$this, 'display_email_settings_page']
+			[$this, 'whatslink_click_tracker_display_email_settings_page']
 		);
 
 		add_submenu_page(
@@ -93,7 +93,7 @@ class WhatsLink_Click_Tracker_Admin {
 			__('Export CSV', 'whatslink-click-tracker').$label,
 			'manage_options',
 			'whatslink-click-tracker-export-csv',
-			[$this, 'display_export_csv_page']
+			[$this, 'whatslink_click_tracker_display_export_csv_page']
 		);
 		
 
@@ -106,7 +106,7 @@ class WhatsLink_Click_Tracker_Admin {
 	 * @access   public
 	 * @return   void
 	 */
-	public function display_email_settings_page() {
+	public function whatslink_click_tracker_display_email_settings_page() {
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/whatslink-click-tracker-email-settings-display.php';
 	}
 
@@ -117,7 +117,7 @@ class WhatsLink_Click_Tracker_Admin {
 	 * @access   public
 	 * @return   void
 	 */
-	public function display_report_page() {
+	public function whatslink_click_tracker_display_report_page() {
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/whatslink-click-tracker-reports-display.php';
 	}
 
@@ -128,7 +128,7 @@ class WhatsLink_Click_Tracker_Admin {
 	 * @access   public
 	 * @return   void
 	 */
-	public function display_export_csv_page() {
+	public function whatslink_click_tracker_display_export_csv_page() {
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/whatslink-click-tracker-export-csv-display.php';
 	}
 
@@ -139,7 +139,7 @@ class WhatsLink_Click_Tracker_Admin {
 	 * @access   public
 	 * @return   array    The click logs.
 	 */
-	public function get_click_logs() {
+	public function whatslink_click_tracker_get_click_logs() {
 		check_ajax_referer('whatslink_click_tracker_view_nonce', 'nonce');
 		global $wpdb;
 
@@ -212,73 +212,13 @@ class WhatsLink_Click_Tracker_Admin {
 	}
 
 	/**
-	 * Get Click Logs with Pagination.
-	 * 
-	 * @since    1.0.0
-	 * @access   public
-	 * @param    int      $page    The page number.
-	 * @param    int      $limit   The number of logs per page.
-	 * @return   array    The paginated click logs.
-	 */
-	public function get_paginated_click_logs($page = 1, $limit = 10) {
-		global $wpdb;
-		$offset = ($page - 1) * $limit;
-		$table_name = $wpdb->prefix . 'whatslink_click_tracker_clicks';
-		$cache_key = 'whatslink_all_clicks_' . $limit . '_' . $offset;
-		$cache_group = 'whatslink_click_tracker';
-
-		$results = wp_cache_get($cache_key, $cache_group);
-
-		if (false === $results) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$results = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT * FROM " . esc_sql($table_name) . " ORDER BY click_datetime DESC LIMIT %d OFFSET %d",
-					$limit,
-					$offset
-				),
-				ARRAY_N
-			);
-
-			wp_cache_set($cache_key, $results, $cache_group, 60); // cache 60s
-		}
-
-		return $results;
-	}
-
-	/**
-	 * Get the total number of click logs.
-	 * 
-	 * @since    1.0.0
-	 * @access   public
-	 * @return   int      The total number of click logs.
-	 */
-	public function get_total_click_logs() {
-		global $wpdb;
-		$table_name = $wpdb->prefix . 'whatslink_click_tracker_clicks';
-
-		$cache_key = 'whatslink_total_count';
-		$cache_group = 'whatslink_click_tracker';
-
-		$total = wp_cache_get($cache_key, $cache_group);
-
-		if (false === $total) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$total = $wpdb->get_var("SELECT COUNT(*) FROM " . esc_sql($table_name));
-			wp_cache_set($cache_key, $total, $cache_group, 60);
-		}
-
-		return $total;
-	}
-
-	/**
 	 * Reset Click Logs.
 	 * 
 	 * @since    1.0.0
 	 * @access   public
 	 * @return   void
 	 */
-	public function reset_click_logs() {
+	public function whatslink_click_tracker_reset_click_logs() {
 		check_ajax_referer('whatslink_click_tracker_reset_nonce', 'nonce');
 		if ( ! current_user_can('manage_options') ) {
 			wp_send_json_error(['message' => 'Non autorizzato']);
@@ -292,7 +232,6 @@ class WhatsLink_Click_Tracker_Admin {
 		wp_send_json_success(['message' => 'Click Log resetted.']);
 	}
 
-
 	/**
 	 * Display the admin page.
 	 * 
@@ -300,7 +239,7 @@ class WhatsLink_Click_Tracker_Admin {
 	 * @access   public
 	 * @return   void
 	 */
-	public function display_admin_page() {
+	public function whatslink_click_tracker_display_admin_page() {
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/whatslink-click-tracker-admin-display.php';
 	}
 

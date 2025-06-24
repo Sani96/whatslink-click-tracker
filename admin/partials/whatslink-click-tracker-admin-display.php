@@ -76,11 +76,11 @@ if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_VERSION') ) {
     <div id="whatslink-click-tracker-footer-bar">
         <span>
             <?php esc_html_e( 'Discover more on', 'whatslink-click-tracker' ); ?>
-            <a href="<?php echo esc_url( 'https://wpsani.store' ); ?>" target="_blank">
+            <a href="<?php echo esc_url( 'https://wpsani.store/?utm_source=whatslink-click-tracker-free-plugin' ); ?>" target="_blank">
                 wpsani.store
             </a>
         </span>
-        <a href="<?php echo esc_url( 'https://wpsani.store/whatslink-click-tracker-pro' ); ?>" class="footer-cta" target="_blank">
+        <a href="<?php echo esc_url( 'https://wpsani.store/whatslink-click-tracker-pro/?utm_source=whatslink-click-tracker-free-plugin' ); ?>" class="footer-cta" target="_blank">
             🚀 <?php esc_html_e( 'Upgrade to Pro →', 'whatslink-click-tracker' ); ?>
         </a>
     </div>
