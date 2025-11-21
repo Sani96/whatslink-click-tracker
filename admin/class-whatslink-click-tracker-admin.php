@@ -143,73 +143,109 @@ class WhatsLink_Click_Tracker_Admin {
 		check_ajax_referer('whatslink_click_tracker_view_nonce', 'nonce');
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'whatslink_click_tracker_clicks';
+		$allowed_orderby = [
+			'post_title',
+			'post_type',
+			'permalink',
+			'click_datetime',
+			'utm_source',
+			'utm_campaign',
+			'utm_medium',
+			'country',
+			'referrer',
+			'user_id',
+		];
 
-		// Secure list of allowed orderby fields
-		$allowed_orderby = ['post_title', 'post_type', 'permalink', 'click_datetime', 'utm_source', 'utm_campaign', 'utm_medium', 'country', 'referrer', 'user_id'];
-
-		// Input sanitization
 		$orderby = isset($_POST['orderby']) ? sanitize_key(wp_unslash($_POST['orderby'])) : 'click_datetime';
-		$order = isset($_POST['order']) ? strtoupper(sanitize_text_field(wp_unslash($_POST['order']))) : 'DESC';
-		$search = isset($_POST['search']) ? sanitize_text_field(wp_unslash($_POST['search'])) : '';
-		$page = isset($_POST['page']) ? intval(wp_unslash($_POST['page'])) : 1;
-		$page = max(1, $page);
-		if (!in_array($orderby, $allowed_orderby, true)) {
+		$order   = isset($_POST['order']) ? strtoupper(sanitize_text_field(wp_unslash($_POST['order']))) : 'DESC';
+		$search  = isset($_POST['search']) ? sanitize_text_field(wp_unslash($_POST['search'])) : '';
+		$page    = isset($_POST['page']) ? intval(wp_unslash($_POST['page'])) : 1;
+		$page    = max(1, $page);
+
+		if ( ! in_array($orderby, $allowed_orderby, true) ) {
 			$orderby = 'click_datetime';
 		}
-		if (!in_array($order, ['ASC', 'DESC'], true)) {
+		if ( ! in_array($order, ['ASC', 'DESC'], true) ) {
 			$order = 'DESC';
 		}
-		$limit = 10;
+
+		$limit  = 10;
 		$offset = ($page - 1) * $limit;
 
-		// Query to recover clicks
-		$cache_key = 'whatslink_click_logs_' . md5("{$search}_{$orderby}_{$order}_{$page}");
+		$cache_key   = 'whatslink_click_logs_' . md5("{$search}_{$orderby}_{$order}_{$page}");
 		$cache_group = 'whatslink_click_tracker';
 
 		$data = wp_cache_get($cache_key, $cache_group);
 
-		if (false === $data) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$data = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT * FROM " . esc_sql($table) . 
-					" WHERE post_title LIKE %s OR permalink LIKE %s 
-					ORDER BY " . esc_sql($orderby) . " " . esc_sql($order) . 
-					" LIMIT %d OFFSET %d",
-					"%$search%",
-					"%$search%",
-					$limit,
-					$offset
-				),
-				ARRAY_A
-			);
+		if ( false === $data ) {
+			// Hardcoded queries
+			if ( 'post_title' === $orderby && 'ASC' === $order ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$data = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT * FROM wp_whatslink_click_tracker_clicks WHERE (post_title LIKE %s OR permalink LIKE %s) ORDER BY post_title ASC LIMIT %d OFFSET %d",
+						"%{$search}%",
+						"%{$search}%",
+						$limit,
+						$offset
+					),
+					ARRAY_A
+				);
+			} elseif ( 'post_title' === $orderby && 'DESC' === $order ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$data = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT * FROM wp_whatslink_click_tracker_clicks WHERE (post_title LIKE %s OR permalink LIKE %s) ORDER BY post_title DESC LIMIT %d OFFSET %d",
+						"%{$search}%",
+						"%{$search}%",
+						$limit,
+						$offset
+					),
+					ARRAY_A
+				);
+			} else {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$data = $wpdb->get_results(
+					$wpdb->prepare(
+						"SELECT * FROM wp_whatslink_click_tracker_clicks WHERE (post_title LIKE %s OR permalink LIKE %s) ORDER BY click_datetime DESC LIMIT %d OFFSET %d",
+						"%{$search}%",
+						"%{$search}%",
+						$limit,
+						$offset
+					),
+					ARRAY_A
+				);
+			}
 
-			wp_cache_set($cache_key, $data, $cache_group, 60); // cache 60s
+			wp_cache_set($cache_key, $data, $cache_group, 60);
 		}
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$total = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM " . esc_sql($table) . " WHERE post_title LIKE %s OR permalink LIKE %s",
-				"%$search%",
-				"%$search%"
+				"SELECT COUNT(*) FROM wp_whatslink_click_tracker_clicks WHERE (post_title LIKE %s OR permalink LIKE %s)",
+				"%{$search}%",
+				"%{$search}%"
 			)
 		);
-		
-		if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_VERSION') ) {
+
+		if ( ! defined( 'WHATSLINK_CLICK_TRACKER_PRO_VERSION' ) ) {
 			foreach ( $data as &$row ) {
-				foreach (['utm_source','utm_campaign','utm_medium','country','referrer','user_id'] as $field) {
-					$row[$field] = '<div class="whatslink-click-tracker-pro-locked-wrapper"><span class="whatslink-click-tracker-pro-locked-content">Pro</span><a href="https://wpsani.store/whatslink-click-tracker-pro" target="_blank" class="whatslink-click-tracker-pro-unlock-link">🔓 Unlock in Pro</a></div>';
+				foreach ( [ 'utm_source', 'utm_campaign', 'utm_medium', 'country', 'referrer', 'user_id' ] as $field ) {
+					$row[ $field ] = '<div class="whatslink-click-tracker-pro-locked-wrapper"><span class="whatslink-click-tracker-pro-locked-content">Pro</span><a href="https://wpsani.store/whatslink-click-tracker-pro" target="_blank" class="whatslink-click-tracker-pro-unlock-link">🔓 Unlock in Pro</a></div>';
 				}
 			}
 		}
 
-		wp_send_json_success([
-			'data'  => $data,
-			'total' => (int) $total,
-		]);
+		wp_send_json_success(
+			[
+				'data'  => $data,
+				'total' => (int) $total,
+			]
+		);
 	}
+
+
 
 	/**
 	 * Reset Click Logs.

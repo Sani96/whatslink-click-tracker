@@ -54,10 +54,13 @@ Upgrade to [WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro) f
 
 == Screenshots ==
 
-1. Main dashboard with logs
-2. Search and filter interface
-3. Locked feature with upgrade CTA
-4. CSV export and click chart (Pro)
+1. Dashboard Overview
+2. AJAX Search
+3. PRO - Dashboard Overview with unlocked fields
+4. PRO - AJAX Search
+5. PRO - Click Tracking graph.
+6. PRO - Email notifications and CSV export options.
+7. PRO - Reports section: view click trends over time with chart and advanced filters.
 
 == Installation ==
 
