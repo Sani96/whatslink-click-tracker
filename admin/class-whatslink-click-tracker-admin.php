@@ -137,7 +137,7 @@ class WhatsLink_Click_Tracker_Admin {
 	 * 
 	 * @since    1.0.0
 	 * @access   public
-	 * @return   array    The click logs.
+	 * @return   void
 	 */
 	public function whatslink_click_tracker_get_click_logs() {
 		check_ajax_referer('whatslink_click_tracker_view_nonce', 'nonce');
@@ -151,9 +151,7 @@ class WhatsLink_Click_Tracker_Admin {
 			'utm_source',
 			'utm_campaign',
 			'utm_medium',
-			'country',
 			'referrer',
-			'user_id',
 		];
 
 		$orderby = isset($_POST['orderby']) ? sanitize_key(wp_unslash($_POST['orderby'])) : 'click_datetime';
@@ -231,7 +229,7 @@ class WhatsLink_Click_Tracker_Admin {
 
 		if ( ! defined( 'WHATSLINK_CLICK_TRACKER_PRO_VERSION' ) ) {
 			foreach ( $data as &$row ) {
-				foreach ( [ 'utm_source', 'utm_campaign', 'utm_medium', 'country', 'referrer', 'user_id' ] as $field ) {
+				foreach ( [ 'utm_source', 'utm_campaign', 'utm_medium','referrer'] as $field ) {
 					$row[ $field ] = '<div class="whatslink-click-tracker-pro-locked-wrapper"><span class="whatslink-click-tracker-pro-locked-content">Pro</span><a href="https://wpsani.store/whatslink-click-tracker-pro" target="_blank" class="whatslink-click-tracker-pro-unlock-link">🔓 Unlock in Pro</a></div>';
 				}
 			}
