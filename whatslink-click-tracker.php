@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       WhatsLink Click Tracker
  * Description:       A simple and easy-to-use WhatsApp link tracker plugin for WordPress.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Plugin URI:        https://wpsani.store/whatslink-click-tracker-free/
  * Author:            WPSani
  * Author URI:        https://wpsani.store/

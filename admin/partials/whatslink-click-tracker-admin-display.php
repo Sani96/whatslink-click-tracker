@@ -10,9 +10,7 @@ if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_VERSION') ) {
     $columns['utm_source']  = __('UTM Source (Pro)', 'whatslink-click-tracker');
     $columns['utm_medium']  = __('UTM Medium (Pro)', 'whatslink-click-tracker');
     $columns['utm_campaign'] = __('UTM Campaign (Pro)', 'whatslink-click-tracker');
-    $columns['country']     = __('Country (Pro)', 'whatslink-click-tracker');
     $columns['referrer']    = __('Referrer (Pro)', 'whatslink-click-tracker');
-    $columns['user_id']     = __('User ID (Pro)', 'whatslink-click-tracker');
 }
 
 
@@ -72,16 +70,7 @@ if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_VERSION') ) {
         </button>
     </div>
 
-
-    <div id="whatslink-click-tracker-footer-bar">
-        <span>
-            <?php esc_html_e( 'Discover more on', 'whatslink-click-tracker' ); ?>
-            <a href="<?php echo esc_url( 'https://wpsani.store/?utm_source=whatslink-click-tracker-free-plugin' ); ?>" target="_blank">
-                wpsani.store
-            </a>
-        </span>
-        <a href="<?php echo esc_url( 'https://wpsani.store/whatslink-click-tracker-pro/?utm_source=whatslink-click-tracker-free-plugin' ); ?>" class="footer-cta" target="_blank">
-            🚀 <?php esc_html_e( 'Upgrade to Pro →', 'whatslink-click-tracker' ); ?>
-        </a>
-    </div>
+    <?php if ( ! defined( 'WHATSLINK_CLICK_TRACKER_PRO_VERSION' ) ) : ?>
+        <?php include_once plugin_dir_path( dirname( __FILE__ ) ) . 'partials/whatslink-click-tracker-footer-bar.php'; ?>
+    <?php endif; ?>
 </div>

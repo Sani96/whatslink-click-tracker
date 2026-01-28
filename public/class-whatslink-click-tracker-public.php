@@ -103,8 +103,6 @@ class WhatsLink_Click_Tracker_Public {
 		
 		$permalink = $post ? get_permalink($post_id) : $url;
 		$parsed_url = wp_parse_url($permalink);
-		$ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '';
-		$country = $this->get_country_from_ip($ip);
 		parse_str($parsed_url['query'] ?? '', $query_args);
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->insert(
@@ -114,57 +112,27 @@ class WhatsLink_Click_Tracker_Public {
 				'post_type'      => $post_type,
 				'permalink'      => $permalink,
 				'click_datetime' => current_time('mysql'),
-				'ip'             => isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '-',
 				'referrer'       => $referrer ? $referrer : '-',
-				'user_id'        => get_current_user_id() ? get_current_user_id() : '-',
 				'utm_source'     => $query_args['utm_source'] ?? '-',
 				'utm_medium'     => $query_args['utm_medium'] ?? '-',
 				'utm_campaign'   => $query_args['utm_campaign'] ?? '-',
-				'country'        => $country ? $country : '-',
 			),
-			array( '%s','%s','%s','%s','%s','%s','%d','%s','%s','%s' )
+			array( '%s','%s','%s','%s','%s','%s','%s','%s' )
 		);
-		
 		do_action( 'whatslink_click_tracker_log_registered', [
 			'post_title'     => $post_title,
 			'post_type'      => $post_type,
 			'permalink'      => $permalink,
 			'click_datetime' => current_time('mysql'),
 			'referrer'       => $referrer ? $referrer : '-',
-			'user_id'        => get_current_user_id(),
 			'utm_source'     => $query_args['utm_source'] ?? '-',
 			'utm_medium'     => $query_args['utm_medium'] ?? '-',
 			'utm_campaign'   => $query_args['utm_campaign'] ?? '-',
-			'country'        => $country ? $country : '-',
 		] );
 		wp_send_json_success();
 
 
 	}
-
-	/**
-	 * Get country name from IP using ip-api.com
-	 *
-	 * @param string $ip
-	 * @return string|null
-	 */
-	private function get_country_from_ip( $ip ) {
-		if ( empty( $ip ) || $ip === '::1' || $ip === '127.0.0.1' ) {
-			return 'Localhost';
-		}
-
-		$response = wp_remote_get( "http://ip-api.com/json/{$ip}?fields=country", [
-			'timeout' => 3,
-		] );
-
-		if ( is_wp_error( $response ) ) {
-			return null;
-		}
-
-		$data = json_decode( wp_remote_retrieve_body( $response ), true );
-		return $data['country'] ?? null;
-	}
-
 
 	/**
 	 * Register the stylesheets for the public-facing side of the site.

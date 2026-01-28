@@ -40,11 +40,9 @@ class WhatsLink_Click_Tracker_Activator {
 			permalink       TEXT                NOT NULL,
 			click_datetime  DATETIME            NOT NULL,
 			referrer        TEXT                NOT NULL,
-			user_id 	    BIGINT(20) UNSIGNED DEFAULT NULL,
 			utm_source      VARCHAR(255)        DEFAULT NULL,
 			utm_medium      VARCHAR(255)        DEFAULT NULL,
 			utm_campaign    VARCHAR(255)        DEFAULT NULL,
-			country         VARCHAR(100)        DEFAULT NULL,
 			PRIMARY KEY  (id),
 			KEY post_type  (post_type(10)),
 			KEY click_dt   (click_datetime)

@@ -19,19 +19,9 @@
                 />
             </div>
         </div>
+        <?php include_once plugin_dir_path( dirname( __FILE__ ) ) . 'partials/whatslink-click-tracker-footer-bar.php'; ?>
     <?php else : ?>
         <?php do_action( 'whatslink_click_tracker_pro_export_csv_ui' ); ?>
     <?php endif; ?>
 
-    <div id="whatslink-click-tracker-footer-bar">
-        <span>
-            <?php esc_html_e( 'Discover more on', 'whatslink-click-tracker' ); ?>
-            <a href="<?php echo esc_url( 'https://wpsani.store' ); ?>" target="_blank">
-                wpsani.store
-            </a>
-        </span>
-        <a href="<?php echo esc_url( 'https://wpsani.store/whatslink-click-tracker-pro' ); ?>" class="footer-cta" target="_blank">
-            🚀 <?php esc_html_e( 'Upgrade to Pro →', 'whatslink-click-tracker' ); ?>
-        </a>
-    </div>
 </div>
