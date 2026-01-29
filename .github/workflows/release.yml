@@ -1,0 +1,95 @@
+name: Release (tests -> deploy to WordPress.org)
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  quality:
+    name: WP Quality Gate (Plugin Check + PHPCS + PHPUnit)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Plugin Check: test WordPress.org readiness
+      - name: Plugin Check
+        uses: 10up/plugin-check-action@stable
+        with:
+          # puoi anche omettere, lui rileva
+          #slug: whatslink-click-tracker
+          # Extra opzionali
+          exclude-checks: |
+            late_escaping
+            file_type
+          # fail-on-warnings: true   # se vuoi essere hardcore
+
+      # Setup PHP per PHPCS/PHPUnit
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer:v2
+          coverage: none
+
+      - name: Install composer deps
+        if: hashFiles('composer.json') != ''
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      # WP PHPCS standards
+      - name: PHPCS (WordPress)
+        uses: 10up/phpcs-action@stable
+        with:
+          enable_warnings: true
+          # in caso tu voglia specificare config
+          #phps_version: "8.2"
+          #standard: WordPress
+          #paths: "."
+
+      # PHPUnit (solo se presente config)
+      - name: Run PHPUnit
+        if: hashFiles('phpunit.xml') != '' || hashFiles('phpunit.xml.dist') != ''
+        run: vendor/bin/phpunit
+
+  # deploy:
+  #   name: Deploy to WordPress.org SVN
+  #   runs-on: ubuntu-latest
+  #   needs: [quality]
+
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+
+  #     # (Opzionale ma consigliato) rigenera dist se usi composer build, npm build, ecc.
+  #     - name: Setup PHP (for build)
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: "8.2"
+  #         tools: composer:v2
+  #         coverage: none
+
+  #     - name: Install dependencies (Composer)
+  #       if: hashFiles('composer.json') != ''
+  #       run: |
+  #         composer install --no-dev --no-interaction --no-progress --prefer-dist
+
+  #     # Se hai un comando tipo "composer run build" o simili, sbloccalo qui.
+  #     # - name: Build
+  #     #   run: composer run build
+
+  #     - name: WordPress.org plugin deploy (10up)
+  #       uses: 10up/action-wordpress-plugin-deploy@stable
+  #       env:
+  #         SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME }}
+  #         SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD }}
+  #         SLUG: ${{ secrets.WPORG_PLUGIN_SLUG }}
+  #         # Opzionali:
+  #         # BUILD_DIR: ./
+  #         # ASSETS_DIR: .wordpress-org
+  #         # IGNORE_OTHER_FILES: true

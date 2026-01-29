@@ -3,7 +3,7 @@ Contributors: sani060913
 Tags: whatsapp, click tracker, analytics, woocommerce, utm
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -26,7 +26,7 @@ Track engagement across posts, pages, and WooCommerce products with an intuitive
 - Button to reset logs
 
 **Want more?**  
-Upgrade to [WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro) for real-time notifications, advanced insights like UTM sources, IP and referrers, CSV export, email notifications, and more!
+Upgrade to [WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro) for real-time notifications, advanced insights like UTM sources, referrers, CSV export, email notifications, and more!
 
 == Features ==
 
@@ -42,8 +42,7 @@ Upgrade to [WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro) f
 = 🔐 PRO VERSION =
 
 * Tracks `utm_source`, `utm_medium`, `utm_campaign`
-* Tracks referrer and logged-in user ID
-* Detects Country (via GeoIP)
+* Tracks referrer
 * Click chart over time (Chart.js)
 * Export logs to CSV
 * Receive click notifications via email
@@ -84,20 +83,6 @@ Not at all. The plugin is optimized for performance and loads asynchronously.
 Want to unlock UTM tracking, CSV export, email reports and much more?
 
 [👉 Upgrade to WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro)
-
-== External services ==
-
-This plugin uses a third-party service to determine the country of the user clicking a WhatsApp link.
-It makes a request to [ip-api.com](http://ip-api.com) to retrieve the country information based on the user's IP address.
-
-- **Service used**: [ip-api.com](http://ip-api.com)
-- **Purpose**: To log the country from which a click originated.
-- **Data sent**: The user's IP address
-- **When**: Every time a WhatsApp link click is tracked
-- **Terms of service**: http://ip-api.com/docs/legal
-- **Privacy policy**: http://ip-api.com/docs/legal#privacy
-
-No other personal data is sent to this external service.
 
 == Changelog ==
 

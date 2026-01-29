@@ -3,7 +3,7 @@
 <div class="wrap">
     <h1><?php esc_html_e('Click Reports', 'whatslink-click-tracker'); ?></h1>
 
-    <?php if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_VERSION') ) : ?>
+    <?php if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE') || ! WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE ) : ?>
         <div class="overlay-pro-feature">
             <div class="locked-overlay">
                 <p>🔒 <?php esc_html_e('This feature is available in the', 'whatslink-click-tracker'); ?> <strong><?php esc_html_e('Pro version', 'whatslink-click-tracker'); ?></strong>.</p>

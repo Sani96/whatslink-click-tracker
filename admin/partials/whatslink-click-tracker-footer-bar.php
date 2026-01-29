@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; ?>
     <div id="whatslink-click-tracker-footer-bar">
         <span>
             <?php esc_html_e( 'Discover more on', 'whatslink-click-tracker' ); ?>

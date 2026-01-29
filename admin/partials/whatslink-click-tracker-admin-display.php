@@ -6,7 +6,7 @@ $columns = apply_filters('whatslink_click_tracker_table_columns', [
     'permalink'      => __('Permalink', 'whatslink-click-tracker'),
     'click_datetime' => __('Datetime', 'whatslink-click-tracker'),
 ]);
-if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_VERSION') ) {    
+if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE') || ! WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE ) {    
     $columns['utm_source']  = __('UTM Source (Pro)', 'whatslink-click-tracker');
     $columns['utm_medium']  = __('UTM Medium (Pro)', 'whatslink-click-tracker');
     $columns['utm_campaign'] = __('UTM Campaign (Pro)', 'whatslink-click-tracker');
@@ -70,7 +70,7 @@ if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_VERSION') ) {
         </button>
     </div>
 
-    <?php if ( ! defined( 'WHATSLINK_CLICK_TRACKER_PRO_VERSION' ) ) : ?>
+    <?php if ( ! defined( 'WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE' ) || ! WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE ) : ?>
         <?php include_once plugin_dir_path( dirname( __FILE__ ) ) . 'partials/whatslink-click-tracker-footer-bar.php'; ?>
     <?php endif; ?>
 </div>

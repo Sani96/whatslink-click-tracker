@@ -46,6 +46,9 @@ class WhatsLink_Click_Tracker_Admin {
 		$this->loader->add_action('wp_ajax_whatslink_click_tracker_get_click_logs', $this, 'whatslink_click_tracker_get_click_logs');
 		$this->loader->add_action('wp_ajax_nopriv_whatslink_click_tracker_get_click_logs', $this, 'whatslink_click_tracker_get_click_logs');
 		$this->loader->add_action('wp_ajax_whatslink_click_tracker_reset_clicks', $this, 'whatslink_click_tracker_reset_click_logs');
+		$this->loader->add_action('admin_init', $this, 'register_license_settings');
+		$this->loader->add_action('admin_init', $this, 'handle_license_actions');
+
 	}
 
 	/**
@@ -66,7 +69,7 @@ class WhatsLink_Click_Tracker_Admin {
 			6
 		);
 		$label = '';
-		if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_VERSION') ) {
+		if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE') || ! WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE ) {
 			$label .= ' <span class="whatslink-click-tracker-pro-badge">PRO</span>';
 		}
 		add_submenu_page(
@@ -94,6 +97,15 @@ class WhatsLink_Click_Tracker_Admin {
 			'manage_options',
 			'whatslink-click-tracker-export-csv',
 			[$this, 'whatslink_click_tracker_display_export_csv_page']
+		);
+
+		add_submenu_page(
+			$this->plugin_name,
+			__('License', 'whatslink-click-tracker'),
+			__('License', 'whatslink-click-tracker'),
+			'manage_options',
+			'whatslink-click-tracker-license',
+			[$this, 'whatslink_click_tracker_display_license_page']
 		);
 		
 
@@ -227,7 +239,7 @@ class WhatsLink_Click_Tracker_Admin {
 			)
 		);
 
-		if ( ! defined( 'WHATSLINK_CLICK_TRACKER_PRO_VERSION' ) ) {
+		if ( ! defined( 'WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE' ) || ! WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE ) {
 			foreach ( $data as &$row ) {
 				foreach ( [ 'utm_source', 'utm_campaign', 'utm_medium','referrer'] as $field ) {
 					$row[ $field ] = '<div class="whatslink-click-tracker-pro-locked-wrapper"><span class="whatslink-click-tracker-pro-locked-content">Pro</span><a href="https://wpsani.store/whatslink-click-tracker-pro" target="_blank" class="whatslink-click-tracker-pro-unlock-link">🔓 Unlock in Pro</a></div>';
@@ -307,4 +319,213 @@ class WhatsLink_Click_Tracker_Admin {
 			)
 		);
 	}
+
+	/**
+	 * Display the license page.
+	 * 
+	 * @since    1.0.1
+	 * @access   public
+	 * @return   void
+	 */
+	public function whatslink_click_tracker_display_license_page() {
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/whatslink-click-tracker-license-display.php';	
+	}
+
+	/**
+	 * Register license settings.
+	 * 
+	 * @since    1.0.1
+	 * @access   public
+	 * @return   void
+	 */
+	public function register_license_settings() {
+
+		register_setting(
+			'whatslink_click_tracker_license',
+			'whatslink_click_tracker_license_key',
+			[
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => '',
+			]
+		);
+
+		register_setting(
+			'whatslink_click_tracker_license',
+			'whatslink_click_tracker_license_status',
+			[
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_key',
+				'default'           => 'missing',
+			]
+		);
+
+		register_setting(
+			'whatslink_click_tracker_license',
+			'whatslink_click_tracker_license_checked_at',
+			[
+				'type'    => 'integer',
+				'default' => 0,
+			]
+		);
+	}
+
+
+	/**
+	 * Handle license actions: activate, deactivate, check.
+	 * 
+	 * @since    1.0.1
+	 * @access   public
+	 * @return   void
+	 */
+	public function handle_license_actions() {
+		if ( ! is_admin() ) {
+			return;
+		}
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$nonce = isset($_POST['whatslink_click_tracker_license_nonce']) ? sanitize_text_field( wp_unslash($_POST['whatslink_click_tracker_license_nonce']) ) : '';
+		if ( empty($nonce) ) {
+			return; 
+		}
+
+		if ( ! wp_verify_nonce( $nonce, 'whatslink_click_tracker_license_action' ) ) {
+			return;
+		}
+
+		$do_activate   = isset($_POST['whatslink_click_tracker_license_activate']);
+		$do_deactivate = isset($_POST['whatslink_click_tracker_license_deactivate']);
+		$do_check      = isset($_POST['whatslink_click_tracker_license_check']);
+
+		if ( ! $do_activate && ! $do_deactivate && ! $do_check ) {
+			return;
+		}
+
+		$license_key = trim( (string) get_option('whatslink_click_tracker_license_key', '') );
+		if ( '' === $license_key ) {
+			update_option('whatslink_click_tracker_license_status', 'missing');
+			$this->license_admin_redirect_with_notice('missing');
+			return;
+		}
+
+		if ( $do_activate ) {
+			$result = $this->edd_license_request('activate_license', $license_key);
+			$status = $this->normalize_edd_status($result);
+			update_option('whatslink_click_tracker_license_status', $status);
+			update_option('whatslink_click_tracker_license_checked_at', time());
+			$this->license_admin_redirect_with_notice($status);
+			return;
+		}
+
+		if ( $do_deactivate ) {
+			$result = $this->edd_license_request('deactivate_license', $license_key);
+			$status = $this->normalize_edd_status($result, true);
+			update_option('whatslink_click_tracker_license_status', $status);
+			update_option('whatslink_click_tracker_license_checked_at', time());
+			$this->license_admin_redirect_with_notice($status);
+			return;
+		}
+
+		if ( $do_check ) {
+			$result = $this->edd_license_request('check_license', $license_key);
+			$status = $this->normalize_edd_status($result);
+			update_option('whatslink_click_tracker_license_status', $status);
+			update_option('whatslink_click_tracker_license_checked_at', time());
+			$this->license_admin_redirect_with_notice($status);
+			return;
+		}
+	}
+
+	/**
+	 * Make a request to the EDD license server.
+	 * 
+	 * @since    1.0.1
+	 * @access   private
+	 * @param    string    $action       The action to perform: activate_license, deactivate_license, check_license.
+	 * @param    string    $license_key  The license key.
+	 * @return   array                 The response data.
+	 */
+	private function edd_license_request($action, $license_key) {
+		$store_url = 'https://wpsani.store';
+		$item_id   = 1503;
+
+		$response = wp_remote_post(
+			$store_url,
+			[
+				'timeout' => 15,
+				'body'    => [
+					'edd_action' => $action,
+					'license'    => $license_key,
+					'item_id'    => $item_id,
+					'url'        => home_url(),
+				],
+			]
+		);
+
+		if ( is_wp_error($response) ) {
+			return [ 'ok' => false, 'error' => $response->get_error_message() ];
+		}
+
+		$code = (int) wp_remote_retrieve_response_code($response);
+		$body = wp_remote_retrieve_body($response);
+
+		$data = json_decode($body, true);
+		if ( 200 !== $code || ! is_array($data) ) {
+			return [ 'ok' => false, 'error' => 'invalid_response', 'raw' => $body, 'code' => $code ];
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Normalize the EDD license status.
+	 * 
+	 * @since    1.0.1
+	 * @access   private
+	 * @param    array    $data            The response data from EDD.
+	 * @param    bool     $is_deactivate   Whether the action was deactivate_license.
+	 * @return   string                   The normalized license status.
+	 */
+	private function normalize_edd_status($data, $is_deactivate = false) {
+		// EDD di solito ritorna: ['success'=>true/false, 'license'=>'valid|invalid|expired|...']
+		if ( ! is_array($data) ) {
+			return 'invalid';
+		}
+
+		if ( isset($data['license']) && is_string($data['license']) ) {
+			$license = sanitize_key($data['license']);
+
+			// Se fai deactivate e torna "deactivated", mappalo a "inactive" o "missing"
+			if ( $is_deactivate && 'deactivated' === $license ) {
+				return 'inactive';
+			}
+			return $license;
+		}
+
+		// fallback
+		return 'invalid';
+	}
+
+	/**
+	 * Redirect to the license admin page with a notice.
+	 * 
+	 * @since    1.0.1
+	 * @access   private
+	 * @param    string    $status    The license status to show in the notice.
+	 * @return   void
+	 */
+	private function license_admin_redirect_with_notice($status) {
+		$url = add_query_arg(
+			[
+				'page'                    => 'whatslink-click-tracker-license',
+				'whatslink_license_notice' => $status,
+			],
+			admin_url('admin.php')
+		);
+		wp_safe_redirect($url);
+		exit;
+	}
+
 }
