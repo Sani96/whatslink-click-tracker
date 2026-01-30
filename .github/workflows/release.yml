@@ -30,8 +30,8 @@ jobs:
       # Creates a build dir excluding dotfiles
       - name: Build plugin dir (no dotfiles)
         run: |
-          rm -rf build
-          mkdir -p build
+          rm -rf whatslink-click-tracker
+          mkdir -p whatslink-click-tracker
           rsync -av --delete \
             --exclude='.git/' \
             --exclude='.github/' \
@@ -41,14 +41,13 @@ jobs:
             --exclude='tests/' \
             --exclude='phpunit.xml*' \
             --exclude='.*' \
-            ./ build/
+            ./ whatslink-click-tracker/
 
       # Plugin Check without dotfiles
       - name: Plugin Check (WordPress.org)
         uses: WordPress/plugin-check-action@v1
         with:
-          build-dir: build
-
+          build-dir: whatslink-click-tracker
       - name: PHPCS (WPCS)
         uses: 10up/wpcs-action@stable
         with:
