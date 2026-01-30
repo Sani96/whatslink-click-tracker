@@ -61,9 +61,7 @@ class WhatsLink_Click_Tracker_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->loader = $loader;
-		if ( !is_admin() && !wp_doing_ajax() && !is_feed() ) {
-			$this->setup_hooks();
-		}
+		$this->setup_hooks();
 	}
 
 	/**
@@ -153,6 +151,9 @@ class WhatsLink_Click_Tracker_Public {
 		 * class.
 		 */
 
+		if ( is_admin() || wp_doing_ajax() || is_feed() ) {
+			return;
+		}
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/whatslink-click-tracker-public.css', array(), $this->version, 'all' );
 
 	}
