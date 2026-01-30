@@ -12,21 +12,27 @@ Track WhatsApp link clicks across your WordPress site. Measure user intent, anal
 
 == Description ==
 
-**WhatsLink Tracker** is a powerful yet lightweight plugin to monitor WhatsApp link clicks on your website.
+**WhatsLink Click Tracker** is a powerful yet lightweight plugin to monitor WhatsApp link clicks on your WordPress website.
 
-Track engagement across posts, pages, and WooCommerce products with an intuitive dashboard, sortable logs, and AJAX search. Perfect for marketers, store owners, and support teams using WhatsApp to communicate with leads or customers.
+Track engagement across posts, pages, and WooCommerce products with an intuitive dashboard, sortable logs, and AJAX search.
+Perfect for marketers, store owners, and support teams using WhatsApp to communicate with leads or customers.
+
+✅ **GDPR-friendly by design**
+This plugin does **NOT** store visitor IP addresses or country/location data.
 
 **Free version features:**
-– Click detection for `wa.me` and `api.whatsapp.com` links
-– Tracks different post types (posts, pages, products)
-– AJAX-powered dashboard for fast performance
-– Easy-to-use interface with pagination and search
-– Sortable columns by title, date, and type
-– Click log with pagination and column sorting
-– Button to reset logs
+– Click detection for `wa.me` and `api.whatsapp.com` links  
+– Tracks different post types (posts, pages, products)  
+– AJAX-powered dashboard for fast performance  
+– Easy-to-use interface with pagination and search  
+– Sortable columns by title, date, and type  
+– Click log with pagination and column sorting  
+– Button to reset logs  
 
 **Want more?**  
-Upgrade to [WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro) for real-time notifications, advanced insights like UTM sources, referrers, CSV export, email notifications, and more!
+Upgrade to **WhatsLink Click Tracker Pro** for real-time notifications, advanced insights like UTM sources, referrers, CSV export, email reports, and more!
+
+👉 [Unlock Pro features](https://wpsani.store/whatslink-tracker-pro)
 
 == Features ==
 
@@ -38,6 +44,7 @@ Upgrade to [WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro) f
 * Column sorting by title, date, type
 * Tracks: post_title, permalink, datetime
 * Lightweight and fast
+* GDPR-friendly: no IP or location tracking
 
 = 🔐 PRO VERSION =
 
@@ -49,7 +56,25 @@ Upgrade to [WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro) f
 * Daily/weekly click reports
 * Priority support
 
-👉 [Click here to unlock Pro features](https://wpsani.store/whatslink-tracker-pro)
+👉 [Upgrade to WhatsLink Click Tracker Pro](https://wpsani.store/whatslink-tracker-pro)
+
+== Privacy / GDPR ==
+
+WhatsLink Click Tracker is built to be privacy-friendly.
+
+**What data is logged (Free):**
+- post/page/product title
+- post type
+- permalink
+- click date/time
+
+**What is NOT collected (Free):**
+- visitor IP address
+- country / geolocation
+- personal user data
+
+If you activate WhatsLink Click Tracker Pro, additional tracking fields may be enabled (UTM parameters, referrer, etc.).
+Always make sure your privacy policy reflects the tools you use.
 
 == Screenshots ==
 
@@ -62,7 +87,7 @@ Upgrade to [WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro) f
 
 1. Upload the plugin files to the `/wp-content/plugins/whatslink-click-tracker` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the ‘Plugins’ screen in WordPress.
-3. Go to `Tools <span aria-hidden="true" class="wp-exclude-emoji">→</span> WhatsLink Tracker` to view logs.
+3. Go to `Tools → WhatsLink Click Tracker` to view logs.
 
 == Frequently Asked Questions ==
 
@@ -71,6 +96,10 @@ Yes! It works with both `https://wa.me/` and `https://api.whatsapp.com/send` lin
 
 = Is it compatible with WooCommerce? =
 Absolutely. You can track clicks on product pages too.
+
+= Is WhatsLink Click Tracker GDPR compliant? =
+The free version is GDPR-friendly by design:
+it does NOT store IP addresses or country/location data.
 
 = Can I export logs? =
 Only in the Pro version, where you get CSV export and email reports.
@@ -82,7 +111,7 @@ Not at all. The plugin is optimized for performance and loads asynchronously.
 
 Want to unlock UTM tracking, CSV export, email reports and much more?
 
-[👉 Upgrade to WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro)
+[👉 Upgrade to WhatsLink Click Tracker Pro](https://wpsani.store/whatslink-tracker-pro)
 
 == Changelog ==
 
@@ -93,11 +122,7 @@ Want to unlock UTM tracking, CSV export, email reports and much more?
 = 1.0.0 =
 * Initial release with click logging, pagination, search and filtering.
 
-
 == Upgrade Notice ==
 
 = 1.0.1 =
 Security and stability improvements recommended for all users.
-
-= 1.0.0 =
-Initial stable release of WhatsLink Tracker.
