@@ -1,16 +1,16 @@
 <?php if ( ! defined( 'ABSPATH' ) ) exit; ?>
 <?php 
-$columns = apply_filters('whatslink_click_tracker_table_columns', [
+$whatslink_click_tracker_columns = apply_filters('whatslink_click_tracker_table_columns', [
     'post_title'     => __('Post Title', 'whatslink-click-tracker'),
     'post_type'      => __('Post Type', 'whatslink-click-tracker'),
     'permalink'      => __('Permalink', 'whatslink-click-tracker'),
     'click_datetime' => __('Datetime', 'whatslink-click-tracker'),
 ]);
 if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE') || ! WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE ) {    
-    $columns['utm_source']  = __('UTM Source (Pro)', 'whatslink-click-tracker');
-    $columns['utm_medium']  = __('UTM Medium (Pro)', 'whatslink-click-tracker');
-    $columns['utm_campaign'] = __('UTM Campaign (Pro)', 'whatslink-click-tracker');
-    $columns['referrer']    = __('Referrer (Pro)', 'whatslink-click-tracker');
+    $whatslink_click_tracker_columns['utm_source']  = __('UTM Source (Pro)', 'whatslink-click-tracker');
+    $whatslink_click_tracker_columns['utm_medium']  = __('UTM Medium (Pro)', 'whatslink-click-tracker');
+    $whatslink_click_tracker_columns['utm_campaign'] = __('UTM Campaign (Pro)', 'whatslink-click-tracker');
+    $whatslink_click_tracker_columns['referrer']    = __('Referrer (Pro)', 'whatslink-click-tracker');
 }
 
 
@@ -35,7 +35,7 @@ if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE') || ! WHATSLINK_C
     <table id="whatslink-click-tracker-table" class="widefat fixed striped">
         <thead>
             <tr>
-                <?php foreach ( $columns as $key => $label ) :?>
+                <?php foreach ( $whatslink_click_tracker_columns as $key => $label ) :?>
                     <th data-orderby="<?php echo esc_attr($key) ?>" class="sortable">
                         <a href="#" data-orderby="<?php echo esc_attr($key) ?>" data-order="desc">
                             <?php echo esc_html($label) ?>

@@ -5,8 +5,8 @@ if (!defined('ABSPATH')) {
 }
 
 // Get license key and status
-$license_key = get_option('whatslink_click_tracker_license_key', '');
-$license_status = get_option('whatslink_click_tracker_license_status', '');
+$whatslink_click_tracker_license_key = get_option('whatslink_click_tracker_license_key', '');
+$whatslink_click_tracker_license_status = get_option('whatslink_click_tracker_license_status', '');
 ?>
 
 <div class="wrap">
