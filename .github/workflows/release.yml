@@ -27,7 +27,6 @@ jobs:
         if: hashFiles('composer.json') != ''
         run: composer install --no-interaction --no-progress --prefer-dist
 
-      # Creates a build dir excluding dotfiles
       - name: Build plugin dir (no dotfiles)
         run: |
           rm -rf whatslink-click-tracker
@@ -43,15 +42,24 @@ jobs:
             --exclude='.*' \
             ./ whatslink-click-tracker/
 
-      # Plugin Check without dotfiles
       - name: Plugin Check (WordPress.org)
         uses: WordPress/plugin-check-action@v1
         with:
           build-dir: whatslink-click-tracker
+
+      - name: Install PHPCS + WPCS
+        run: |
+          composer require --dev \
+            squizlabs/php_codesniffer:"^3" \
+            wp-coding-standards/wpcs:"^3" \
+            dealerdirect/phpcodesniffer-composer-installer:"^1" \
+            --no-interaction --no-progress
+
+          vendor/bin/phpcs -i
+
       - name: PHPCS (WPCS)
-        uses: 10up/wpcs-action@stable
-        with:
-          enable_warnings: true
+        run: |
+          vendor/bin/phpcs --standard=WordPress -p whatslink-click-tracker
 
       - name: Run PHPUnit
         if: hashFiles('phpunit.xml') != '' || hashFiles('phpunit.xml.dist') != ''
