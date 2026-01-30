@@ -1,14 +1,3 @@
-name: Release (tests -> deploy to WordPress.org)
-
-on:
-  push:
-    tags:
-      - "v*.*.*"
-
-concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false
-
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -27,8 +16,27 @@ jobs:
         if: hashFiles('composer.json') != ''
         run: composer install --no-interaction --no-progress --prefer-dist
 
+      # Creates a build dir excluding dotfiles
+      - name: Build plugin dir (no dotfiles)
+        run: |
+          rm -rf build
+          mkdir -p build
+          rsync -av --delete \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.wordpress-org/' \
+            --exclude='node_modules/' \
+            --exclude='vendor/' \
+            --exclude='tests/' \
+            --exclude='phpunit.xml*' \
+            --exclude='.*' \
+            ./ build/
+
+      # Plugin Check without dotfiles
       - name: Plugin Check (WordPress.org)
         uses: WordPress/plugin-check-action@v1
+        with:
+          build-dir: build
 
       - name: PHPCS (WPCS)
         uses: 10up/wpcs-action@stable

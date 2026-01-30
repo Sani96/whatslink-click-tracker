@@ -35,10 +35,10 @@ if ( ! defined('WHATSLINK_CLICK_TRACKER_PRO_IS_LICENSE_ACTIVE') || ! WHATSLINK_C
     <table id="whatslink-click-tracker-table" class="widefat fixed striped">
         <thead>
             <tr>
-                <?php foreach ( $whatslink_click_tracker_columns as $key => $label ) :?>
-                    <th data-orderby="<?php echo esc_attr($key) ?>" class="sortable">
-                        <a href="#" data-orderby="<?php echo esc_attr($key) ?>" data-order="desc">
-                            <?php echo esc_html($label) ?>
+                <?php foreach ( $whatslink_click_tracker_columns as $whatslink_click_tracker_key => $whatslink_click_tracker_label ) :?>
+                    <th data-orderby="<?php echo esc_attr($whatslink_click_tracker_key) ?>" class="sortable">
+                        <a href="#" data-orderby="<?php echo esc_attr($whatslink_click_tracker_key) ?>" data-order="desc">
+                            <?php echo esc_html($whatslink_click_tracker_label) ?>
                             <span class="sorting-indicators">
                                 <span class="sorting-indicator asc"></span>
                                 <span class="sorting-indicator desc"></span>
