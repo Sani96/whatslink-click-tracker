@@ -58,12 +58,12 @@ class WhatsLink_Click_Tracker_Public {
 	 * @param      string    $version    The version of this plugin.
 	 */
 	public function __construct( $plugin_name, $version, $loader = null ) {
-
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->loader = $loader;
-		$this->setup_hooks();
-
+		if ( !is_admin() && !wp_doing_ajax() && !is_feed() ) {
+			$this->setup_hooks();
+		}
 	}
 
 	/**
@@ -181,7 +181,7 @@ class WhatsLink_Click_Tracker_Public {
 			plugin_dir_url(__FILE__) . 'js/whatslink-click-tracker-public.js',
 			array('jquery'),
 			$this->version,
-			false
+			true
 		);		
 
 		wp_localize_script(
