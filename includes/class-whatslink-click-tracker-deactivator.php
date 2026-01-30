@@ -18,7 +18,7 @@
  * @since      1.0.0
  * @package    WhatsLink_Click_Tracker
  * @subpackage WhatsLink_Click_Tracker/includes
- * @author     WPSani <support@wpsani.store>
+ * @author     sani060913 <support@wpsani.store>
  */
 class WhatsLink_Click_Tracker_Deactivator {
 

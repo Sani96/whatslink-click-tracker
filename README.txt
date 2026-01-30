@@ -1,6 +1,6 @@
 === WhatsLink Click Tracker ===
 Contributors: sani060913
-Tags: whatsapp, click tracker, analytics, woocommerce, utm
+Tags: whatsapp, whatsapp button, analytics, woocommerce, utm
 Requires at least: 6.0
 Tested up to: 6.9
 Stable tag: 1.0.1
@@ -17,13 +17,13 @@ Track WhatsApp link clicks across your WordPress site. Measure user intent, anal
 Track engagement across posts, pages, and WooCommerce products with an intuitive dashboard, sortable logs, and AJAX search. Perfect for marketers, store owners, and support teams using WhatsApp to communicate with leads or customers.
 
 **Free version features:**
-- Click detection for `wa.me` and `api.whatsapp.com` links
-- Tracks different post types (posts, pages, products)
-- AJAX-powered dashboard for fast performance
-- Easy-to-use interface with pagination and search
-- Sortable columns by title, date, and type
-- Click log with pagination and column sorting
-- Button to reset logs
+– Click detection for `wa.me` and `api.whatsapp.com` links
+– Tracks different post types (posts, pages, products)
+– AJAX-powered dashboard for fast performance
+– Easy-to-use interface with pagination and search
+– Sortable columns by title, date, and type
+– Click log with pagination and column sorting
+– Button to reset logs
 
 **Want more?**  
 Upgrade to [WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro) for real-time notifications, advanced insights like UTM sources, referrers, CSV export, email notifications, and more!
@@ -62,7 +62,7 @@ Upgrade to [WhatsLink Tracker Pro](https://wpsani.store/whatslink-tracker-pro) f
 
 1. Upload the plugin files to the `/wp-content/plugins/whatslink-click-tracker` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the ‘Plugins’ screen in WordPress.
-3. Go to `Tools → WhatsLink Tracker` to view logs.
+3. Go to `Tools <span aria-hidden="true" class="wp-exclude-emoji">→</span> WhatsLink Tracker` to view logs.
 
 == Frequently Asked Questions ==
 
@@ -86,10 +86,18 @@ Want to unlock UTM tracking, CSV export, email reports and much more?
 
 == Changelog ==
 
+= 1.0.1 =
+* Improved security and data validation.
+* General bug fixes and stability improvements.
+
 = 1.0.0 =
 * Initial release with click logging, pagination, search and filtering.
 
+
 == Upgrade Notice ==
+
+= 1.0.1 =
+Security and stability improvements recommended for all users.
 
 = 1.0.0 =
 Initial stable release of WhatsLink Tracker.
