@@ -181,7 +181,7 @@ class WhatsLink_Click_Tracker_Public {
 			plugin_dir_url(__FILE__) . 'js/whatslink-click-tracker-public.js',
 			array('jquery'),
 			$this->version,
-			true
+			false
 		);		
 
 		wp_localize_script(
